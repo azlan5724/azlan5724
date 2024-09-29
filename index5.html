@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snowfall Effect</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="snowCanvas"></canvas>
+    <script>
+      const canvas = document.getElementById("snowCanvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let snowflakes = [];
+
+      function createSnowflake() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const radius = Math.random() * 4 + 1; // radius between 1 and 5
+        snowflakes.push({ x, y, radius });
+      }
+
+      function updateSnowflakes() {
+        for (let flake of snowflakes) {
+          flake.y += flake.radius / 2; // fall speed
+          if (flake.y > canvas.height) {
+            flake.y = 0;
+            flake.x = Math.random() * canvas.width;
+          }
+        }
+      }
+
+      function drawSnowflakes() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        for (let flake of snowflakes) {
+          ctx.beginPath();
+          ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function animate() {
+        updateSnowflakes();
+        drawSnowflakes();
+        requestAnimationFrame(animate);
+      }
+
+      // Create initial snowflakes
+      for (let i = 0; i < 100; i++) {
+        createSnowflake();
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
